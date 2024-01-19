@@ -1,0 +1,47 @@
+{
+  "name": "Palworld",
+  "display": "Palworld",
+  "type": "srcds",
+  "install": [
+    {
+      "appId": "2394010",
+      "type": "steamgamedl"
+    }
+  ],
+  "run": {
+    "stop": "exit",
+    "command": "chmod 755 PalServer.sh && ./PalServer.sh --port=${port} --players=${players} --useperfthreads -NoAsyncLoadingThread -UseMultithreadForDS -EpicApp=PalServer",
+    "workingDirectory": "",
+    "pre": [],
+    "post": [],
+    "environmentVars": {}
+  },
+  "data": {
+    "players": {
+      "type": "integer",
+      "desc": "Max Players",
+      "display": "Max Players",
+      "required": true,
+      "value": "32"
+    },
+    "port": {
+      "type": "integer",
+      "desc": "Server Port",
+      "display": "Server Port",
+      "required": true,
+      "value": "8211"
+    }
+  },
+  "environment": {
+    "type": "tty"
+  },
+  "supportedEnvironments": [
+    {
+      "type": "tty"
+    }
+  ],
+  "requirements": {
+    "os": "linux",
+    "arch": "amd64"
+  }
+}
