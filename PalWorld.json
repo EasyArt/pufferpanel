@@ -10,7 +10,7 @@
   ],
   "run": {
     "stop": "exit",
-    "command": "chmod 755 PalServer.sh && ./PalServer.sh -port=${port} -players=${players} -useperfthreads -NoAsyncLoadingThread -UseMultithreadForDS -EpicApp=PalServer",
+    "command": "./PalServer.sh --port=${port} --players=${players} --useperfthreads --NoAsyncLoadingThread --UseMultithreadForDS --EpicApp=PalServer",
     "workingDirectory": "",
     "pre": [],
     "post": [],
