@@ -8,6 +8,13 @@
       "type": "steamgamedl"
     }
   ],
+    {
+      "commands": [
+        "chmod +x PalServer.sh",
+      ],
+      "type": "command"
+    }
+  ],
   "run": {
     "stop": "exit",
     "command": "./PalServer.sh -port=${port} -players=${players} -log -useperfthreads -NoAsyncLoadingThread -UseMultithreadForDS -EpicApp=PalServer",
