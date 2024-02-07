@@ -6,8 +6,7 @@
     {
       "appId": "2394010",
       "type": "steamgamedl"
-    }
-  ],
+    },
     {
       "commands": [
         "chmod +x PalServer.sh"
