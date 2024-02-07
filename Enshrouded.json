@@ -5,9 +5,7 @@
   "install": [
     {
       "commands": [
-        "/var/lib/pufferpanel/binaries/depotdownloader/DepotDownloader -app 2278520 -os windows",
-        "sudo apt install wine64 -y",
-        "sudo apt install wine32 -y"
+        "/var/lib/pufferpanel/binaries/depotdownloader/DepotDownloader -app 2278520 -os windows"
       ],
       "type": "command"
     }
