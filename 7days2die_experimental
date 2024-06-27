@@ -1,0 +1,37 @@
+{
+  "name": "7days2die_experimental",
+  "display": "7Days2Die (Experimental)",
+  "type": "custom",
+  "install": [
+    {
+      "commands": [
+        "../../../../../var/lib/pufferpanel/binaries/depotdownloader/DepotDownloader -app 294420 -beta latest_experimental -dir .",
+        "chmod +x 7DaysToDieServer.x86_64"
+      ],
+      "type": "command"
+    }
+  ],
+  "run": {
+    "stopCode": 2,
+    "command": "./7DaysToDieServer.x86_64 -quit -batchmode -nographics -dedicated -configfile=serverconfig.xml",
+    "workingDirectory": "",
+    "pre": [],
+    "post": [],
+    "environmentVars": {
+      "LD_LIBRARY_PATH": "./linux64:$LD_LIBRARY_PATH"
+    }
+  },
+  "data": {},
+  "environment": {
+    "type": "tty"
+  },
+  "supportedEnvironments": [
+    {
+      "type": "tty"
+    }
+  ],
+  "requirements": {
+    "os": "linux",
+    "arch": "amd64"
+  }
+}
