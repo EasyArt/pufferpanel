@@ -1,0 +1,159 @@
+{
+    "type": "minecraft-java",
+    "display": "Paper - Minecraft",
+    "icon": "minecraft-java",
+    "data": {
+        "eula": {
+            "type": "boolean",
+            "value": false,
+            "display": "EULA Agreement (true/false)",
+            "desc": "Do you agree to the Minecraft EULA?",
+            "required": true,
+            "userEdit": true
+        },
+        "ip": {
+            "type": "string",
+            "value": "0.0.0.0",
+            "display": "IP",
+            "desc": "Server bind IP",
+            "required": true,
+            "userEdit": false
+        },
+        "javaversion": {
+            "type": "string",
+            "value": "21",
+            "display": "Java Version",
+            "desc": "Java version to use (8, 11, 17, 21)",
+            "required": true,
+            "userEdit": true
+        },
+        "memory": {
+            "type": "integer",
+            "value": 2048,
+            "display": "Memory (MB)",
+            "desc": "RAM to allocate to the server (in MB)",
+            "required": true,
+            "userEdit": false
+        },
+        "motd": {
+            "type": "string",
+            "value": "A Minecraft Server\\n§9Hosted on PufferPanel",
+            "display": "MOTD",
+            "desc": "Message displayed in the server list",
+            "required": true,
+            "userEdit": true
+        },
+        "paperbuild": {
+            "type": "string",
+            "value": "416",
+            "display": "Paper Build",
+            "desc": "Build number of Paper to install, e.g., 416",
+            "required": true,
+            "userEdit": true
+        },
+        "port": {
+            "type": "integer",
+            "value": 25565,
+            "display": "Server Port",
+            "desc": "Port the server will run on",
+            "required": true,
+            "userEdit": false
+        },
+        "version": {
+            "type": "string",
+            "value": "1.20.6",
+            "display": "Minecraft Version",
+            "desc": "Version of Minecraft to install (e.g., 1.20.6)",
+            "required": true,
+            "userEdit": true
+        }
+    },
+    "groups": [
+        {
+            "display": "General",
+            "description": "Basic settings for Paper Minecraft server",
+            "variables": [
+                "eula",
+                "version",
+                "paperbuild",
+                "memory",
+                "port",
+                "ip",
+                "motd",
+                "javaversion"
+            ],
+            "order": 1
+        }
+    ],
+    "install": [
+        {
+            "if": "javaversion != '' && env == 'host'",
+            "type": "javadl",
+            "version": "${javaversion}"
+        },
+        {
+            "type": "download",
+            "files": [
+                "https://api.papermc.io/v2/projects/paper/versions/${version}/builds/${paperbuild}/downloads/paper-${version}-${paperbuild}.jar"
+            ]
+        },
+        {
+            "type": "move",
+            "source": "paper-*.jar",
+            "target": "server.jar"
+        },
+        {
+            "type": "writefile",
+            "target": "server.properties",
+            "text": "server-ip=${ip}\nserver-port=${port}\nmotd=${motd}\n"
+        },
+        {
+            "type": "writefile",
+            "text": "eula=${eula}",
+            "target": "eula.txt"
+        }
+    ],
+    "uninstall": null,
+    "run": {
+        "command": [
+            {
+                "command": "java${javaversion} -Xmx${memory}M -jar server.jar nogui",
+                "if": "env == 'host'"
+            },
+            {
+                "command": "java -Xmx${memory}M -jar server.jar nogui",
+                "if": "env != 'host'"
+            }
+        ],
+        "stop": "stop",
+        "stdin": {
+            "type": "stdin"
+        },
+        "autostart": false,
+        "autorecover": false,
+        "autorestart": false
+    },
+    "environment": {
+        "type": "host"
+    },
+    "supportedEnvironments": [
+        {
+            "type": "host"
+        },
+        {
+            "type": "docker",
+            "portBindings": [
+                "0.0.0.0:${port}:${port}/tcp"
+            ],
+            "image": "eclipse-temurin:${javaversion}"
+        }
+    ],
+    "requirements": {},
+    "stats": {
+        "type": "jcmd"
+    },
+    "query": {
+        "type": "minecraft"
+    },
+    "name": "paper-minecraft"
+}
