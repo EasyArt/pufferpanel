@@ -1,0 +1,124 @@
+{
+    "type": "openra",
+    "display": "OpenRA - Red Alert",
+    "icon": "gamepad",
+    "data": {
+        "AdvertiseOnline": {
+            "type": "boolean",
+            "value": true,
+            "display": "Advertise server online",
+            "desc": "Whether the server should appear in the public server list",
+            "required": true,
+            "userEdit": true
+        },
+        "ListenPort": {
+            "type": "integer",
+            "value": 1234,
+            "display": "UDP Port",
+            "desc": "Port that clients will use to connect to the server",
+            "required": true,
+            "userEdit": true
+        },
+        "Map": {
+            "type": "string",
+            "value": "",
+            "display": "Map",
+            "desc": "Map ID or leave empty for random map",
+            "required": false,
+            "userEdit": true
+        },
+        "Mod": {
+            "type": "string",
+            "value": "ra",
+            "display": "Mod",
+            "desc": "Mod to use (e.g. ra, cnc, d2k)",
+            "required": true,
+            "userEdit": true
+        },
+        "Name": {
+            "type": "string",
+            "value": "My OpenRA Server",
+            "display": "Server Name",
+            "desc": "Name displayed in the public server list",
+            "required": true,
+            "userEdit": true
+        },
+        "Password": {
+            "type": "string",
+            "value": "",
+            "display": "Join Password",
+            "desc": "Optional password required to join the server",
+            "required": false,
+            "userEdit": true
+        },
+        "RequireAuthentication": {
+            "type": "boolean",
+            "value": false,
+            "display": "Require Authentication",
+            "desc": "Only allow authenticated users to join",
+            "required": true,
+            "userEdit": true
+        }
+    },
+    "groups": [
+        {
+            "display": "Server Settings",
+            "description": "General configuration for the OpenRA server",
+            "variables": [
+                "Name",
+                "Mod",
+                "Map",
+                "ListenPort",
+                "AdvertiseOnline",
+                "Password",
+                "RequireAuthentication"
+            ],
+            "order": 1
+        }
+    ],
+    "install": [
+        {
+            "type": "writefile",
+            "target": "start.sh",
+            "text": "#!/bin/sh\n\nexport Name=\"${Name}\"\nexport Mod=\"${Mod}\"\nexport Map=\"${Map}\"\nexport ListenPort=\"${ListenPort}\"\nexport AdvertiseOnline=\"${AdvertiseOnline}\"\nexport Password=\"${Password}\"\nexport RequireAuthentication=\"${RequireAuthentication}\"\n\n/home/openra/lib/openra/launch-dedicated.sh"
+        }
+    ],
+    "uninstall": null,
+    "run": {
+        "command": [
+            {
+                "command": "/bin/sh start.sh"
+            }
+        ],
+        "stop": "^C",
+        "stdin": {
+            "type": "stdin"
+        },
+        "autostart": true,
+        "autorecover": false,
+        "autorestart": false
+    },
+    "environment": {
+        "type": "docker"
+    },
+    "supportedEnvironments": [
+        {
+            "type": "docker",
+            "volumes": [
+                "openra_data:/home/openra/.config/openra"
+            ],
+            "image": "ghcr.io/dkruyt/openra:latest",
+            "portBindings": [
+                "0.0.0.0:${ListenPort}:${ListenPort}/udp"
+            ]
+        }
+    ],
+    "requirements": {},
+    "stats": {
+        "type": ""
+    },
+    "query": {
+        "type": ""
+    },
+    "name": "openra-docker"
+}
