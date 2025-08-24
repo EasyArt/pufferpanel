@@ -1,53 +1,84 @@
 {
-  "name": "Palworld",
-  "display": "Palworld",
-  "type": "srcds",
-  "install": [
-    {
-      "appId": "2394010",
-      "type": "steamgamedl"
+    "type": "srcds",
+    "display": "Palworld",
+    "icon": "palworld",
+    "data": {
+        "steam_user": {
+            "type": "string",
+            "value": "anonymous",
+            "display": "Steam User",
+            "desc": "Steam-Login (für Install)",
+            "required": true,
+            "userEdit": true
+        }
     },
-    {
-      "commands": [
-        "chmod +x PalServer.sh"
-      ],
-      "type": "command"
-    }
-  ],
-  "run": {
-    "stop": "exit",
-    "command": "./PalServer.sh -port=${port} -players=${players} -log -useperfthreads -NoAsyncLoadingThread -UseMultithreadForDS -EpicApp=PalServer",
-    "workingDirectory": "",
-    "pre": [],
-    "post": [],
-    "environmentVars": {}
-  },
-  "data": {
-    "players": {
-      "type": "integer",
-      "desc": "Max Players",
-      "display": "Max Players",
-      "required": true,
-      "value": "32"
+    "install": [
+        {
+            "if": "env == 'host'",
+            "type": "steamgamedl",
+            "appId": "2394010",
+            "username": "${steam_user}"
+        },
+        {
+            "if": "env == 'docker'",
+            "type": "command",
+            "commands": [
+                "steamcmd +force_install_dir /pufferpanel +login ${steam_user} +app_update 2394010 validate +quit"
+            ]
+        },
+        {
+            "if": "env == 'host'",
+            "type": "command",
+            "commands": [
+                "chmod +x ./PalServer.sh",
+                "touch ./parameters.txt"
+            ]
+        },
+        {
+            "if": "env == 'docker'",
+            "type": "command",
+            "commands": [
+                "chmod +x /pufferpanel/PalServer.sh",
+                "touch /pufferpanel/parameters.txt"
+            ]
+        }
+    ],
+    "uninstall": null,
+    "run": {
+        "command": "./PalServer.sh",
+        "stop": "exit",
+        "stdin": {
+            "type": "stdin"
+        },
+        "autostart": false,
+        "autorecover": false,
+        "autorestart": false
     },
-    "port": {
-      "type": "integer",
-      "desc": "Server Port",
-      "display": "Server Port",
-      "required": true,
-      "value": "8211"
-    }
-  },
-  "environment": {
-    "type": "tty"
-  },
-  "supportedEnvironments": [
-    {
-      "type": "tty"
-    }
-  ],
-  "requirements": {
-    "os": "linux",
-    "arch": "amd64"
-  }
+    "environment": {
+        "type": "host"
+    },
+    "supportedEnvironments": [
+        {
+            "type": "host"
+        },
+        {
+            "type": "docker",
+            "image": "steamcmd/steamcmd",
+            "portBindings": [
+                "0.0.0.0:8211:8211/udp",
+                "0.0.0.0:27015:27015/udp"
+            ]
+        }
+    ],
+    "requirements": {
+        "os": "linux",
+        "arch": "amd64"
+    },
+    "stats": {
+        "type": ""
+    },
+    "query": {
+        "type": ""
+    },
+    "name": "Palworld"
 }
